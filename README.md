@@ -78,3 +78,27 @@ sudo apt install ros-$ROS_DISTRO-cv-brigde
 
 sudo apt install ros-$ROS_DISTRO-usb-cam
 
+
+## Log using Ros2
+
+ros2 bag record \topic_name 
+
+ros2 bag record -a 
+
+ros2 bag record -o name_of_log
+
+ros2 bag player name_of_log
+
+## Using GAzebo
+
+sudo apt install ros-$ROS_DISTRO-ros-ign-brigde
+
+ign gazebo
+
+ign gazebo name_of_model
+
+ign topic -l 
+
+ros2 run ros_ign_brigde paramter_brigde ...
+
+export IGN_GAZEBO_RESOURCE_PATH = path_contens_constom_model
