@@ -17,7 +17,7 @@ int main(int argc, char * argv[]){
 
     auto request = std::make_shared<GetImageSrv::Request>();
 
-    std::cout << "Please type a number to check if it is Odd or Even:  ";
+    std::cout << "Angle image that you need:  ";
     std::cin >> request->angle;
 
     client->wait_for_service();
@@ -28,7 +28,8 @@ int main(int argc, char * argv[]){
     if(rclcpp::spin_until_future_complete(service_client_node, result) == 
         rclcpp::FutureReturnCode::SUCCESS){
 
-            auto cv_ptr = cv_bridge::toCvCopy(result.get()->image, "brg8");
+
+            auto cv_ptr = cv_bridge::toCvCopy(result.get()->image, "rgb8");
 
             cv::imshow("Image Response", cv_ptr->image);
             cv::waitKey(0);

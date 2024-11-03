@@ -2,4 +2,4 @@
 int64 angle
 ---
 #Response
-sensor_msgs/Image image #Either "Odd" or "Event"
+sensor_msgs/Image image

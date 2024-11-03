@@ -6,6 +6,8 @@
 #include <opencv2/highgui.hpp>
 #include <cv_bridge/cv_bridge.h>
 
+#include <string>
+
 typedef ros2_cpp_learning::srv::GetImage GetImageSrv;
 
 class GetImageServiceNode : public rclcpp::Node {
@@ -24,13 +26,16 @@ class GetImageServiceNode : public rclcpp::Node {
         void get_image_angle(const GetImageSrv::Request::SharedPtr request,
         GetImageSrv::Response::SharedPtr response){
 
-            auto image = cv::imread("src/ros2_cpp_learning/images/30.png");
+            cv::Mat image = cv::imread("src/ros2_cpp_learning/images/" + 
+                                    std::to_string(request->angle) + 
+                                    ".png");
 
             cv::imshow("Image Requested", image);
             cv::waitKey(0);
+        
+            sensor_msgs::msg::Image::SharedPtr image_msg_ptr = cv_bridge::CvImage(
+                std_msgs::msg::Header(), "rgb8", image).toImageMsg();
 
-            auto image_msg_ptr = cv_bridge::CvImage(
-                std_msgs::msg::Header(), "brg8", image).toImageMsg();
             response->image = *image_msg_ptr;
 
         }
