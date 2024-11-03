@@ -17,6 +17,8 @@ find_package(rosidl_default_generators REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(rclcpp_action REQUIRED)
+find_package(geometry_msgs REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
 
 #Generate custom interfaces
@@ -24,9 +26,10 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 rosidl_generate_interfaces(${PROJECT_NAME}
     "srv/OddEventCheck.srv"
     "srv/GetImage.srv"
-    DEPENDENCIES
-    sensor_msgs
-    ADD_LINTER_TESTS
+    "action/Navigate.action"
+  DEPENDENCIES 
+  sensor_msgs action_msgs geometry_msgs
+  ADD_LINTER_TESTS
 )
 
 # Set support for a custom mensages
@@ -60,9 +63,16 @@ ament_target_dependencies(service_client rclcpp std_msgs)
 add_executable(service_server_image src/service_server_image.cpp)
 ament_target_dependencies(service_server_image rclcpp std_msgs sensor_msgs OpenCV cv_bridge)
 
-
 add_executable(service_client_image src/service_client_image.cpp)
 ament_target_dependencies(service_client_image rclcpp std_msgs sensor_msgs OpenCV cv_bridge)
+
+add_executable(action_server src/action_server.cpp)
+ament_target_dependencies(action_server rclcpp geometry_msgs action_msgs rclcpp_action) 
+target_link_libraries(action_server "${cpp_typesupport_target}")
+
+add_executable(action_client src/action_client.cpp)
+ament_target_dependencies(action_client rclcpp geometry_msgs action_msgs rclcpp_action) 
+target_link_libraries(action_client "${cpp_typesupport_target}")
 
 target_link_libraries(service_client "${cpp_typesupport_target}")
 target_link_libraries(service_server "${cpp_typesupport_target}")
@@ -80,6 +90,8 @@ install(TARGETS
   service_client
   service_server_image
   service_client_image
+  action_server
+  action_client
   DESTINATION lib/${PROJECT_NAME}
   )
 
