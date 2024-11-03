@@ -19,6 +19,7 @@ class HelloWorldPubNode : public rclcpp::Node
             auto message = std_msgs::msg::String();
             message.data = "Hello World " + std::to_string(counter_);
             publisher_->publish(message);
+            RCLCPP_WARN(this->get_logger(), message.data.c_str());
             counter_++;
         }
         rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
